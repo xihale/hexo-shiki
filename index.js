@@ -1,27 +1,26 @@
-// const fs = require("fs");
+"use struct";
 
 const shiki = require("shiki");
 const he = require("he");
 
-function debug(data) {
-  // fs.writeFile("index.txt", data.source, {
-  //   flag: "a",
-  // },_=>{});
-}
+const useDebug = false;
+const debug = useDebug ? require("./lib/debug") : { log: (_) => {} };
+const options = require("./lib/options");
 
 hexo.extend.filter.register(
   "after_post_render",
   async (data) => {
-    if (
-      data.layout !== "post" ||
-      data?.shiki?.enable === false ||
-      (data?.shiki?.enable === undefined &&
-        (hexo.config?.shiki?.enable === false ||
-          hexo.config?.shiki?.enable === undefined))
-    )
-      return data;
+    const opt = options.mix(
+      ["enable", "theme"],
+      hexo.config?.shiki,
+      data?.shiki
+    );
 
-    debug(data);
+    debug.log(JSON.stringify(opt));
+
+    if ((data.layout !== "post") | (opt.enable !== true)) return data;
+
+    debug.log(data.source);
 
     // Get the Language names: class="language-(.*?)"
     const langPattern = /class="language-(.*?)"/gms;
@@ -45,7 +44,7 @@ hexo.extend.filter.register(
     }
 
     var highlighter = await shiki.getHighlighter({
-      theme: data?.shiki?.theme ?? hexo?.shiki?.theme ?? "one-dark-pro",
+      theme: opt.theme !== undefined ? opt.theme : "one-dark-pro",
       langs: langs,
     });
 
@@ -62,7 +61,7 @@ hexo.extend.filter.register(
       ++count; // get next lang
     }
 
-    debug(data);
+    debug.log(data.source);
 
     return data;
   },
