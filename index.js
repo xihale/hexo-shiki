@@ -13,7 +13,8 @@ hexo.extend.filter.register(
     const opt = options.mix(
       ["enable", "theme"],
       hexo.config?.shiki,
-      data?.shiki
+      data?.shiki,
+      {enable: false, theme: 'one-dark-pro'}
     );
 
     debug.log(JSON.stringify(opt));
