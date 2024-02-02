@@ -1,6 +1,6 @@
 {
   "name": "hexo-shiki",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "main": "index.js",
   "author": "xihale",
   "repository": {
@@ -20,5 +20,7 @@
   ],
   "devDependencies": {
     "eslint": "^8.46.0"
-  }
+  },
+  "_from": "hexo-shiki@0.0.3",
+  "_resolved": "https://registry.npmmirror.com/hexo-shiki/-/hexo-shiki-0.0.3.tgz"
 }

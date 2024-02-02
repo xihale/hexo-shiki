@@ -17,13 +17,14 @@ hexo.extend.filter.register(
       {enable: false, theme: 'one-dark-pro'}
     );
 
-    debug.log(JSON.stringify(opt));
+    // debug.log(JSON.stringify(opt));
 
-    if ((data.layout !== "post") | (opt.enable !== true)) return data;
+    if (opt.enable !== true) return data;
 
-    debug.log(data.source);
+    // debug.log(data.source);
 
     // Get the Language names: class="language-(.*?)"
+    const pewPattern = /<pre>(.*?)<\/pre>/gs;
     const langPattern = /class="language-(.*?)"/gms;
     let matches,
       langs = [];
@@ -44,27 +45,38 @@ hexo.extend.filter.register(
       langs.push(matches[1]);
     }
 
+    // langs 去重
+    raw_langs = [...new Set(langs)];
+
+    debug.log(data.source+": "+raw_langs);
     var highlighter = await shiki.getHighlighter({
       theme: opt.theme !== undefined ? opt.theme : "one-dark-pro",
-      langs: langs,
+      langs: raw_langs,
     });
 
     let count = 0;
-    const pewPattern = /<pre>(.*?)<\/pre>/gs;
     while ((matches = pewPattern.exec(data.content)) !== null) {
+      // plaintext
+      if(!matches[1].includes("<code class=\"language-")){
+        data.content = data.content.replace(
+          matches[0],
+          await highlighter.codeToHtml(matches[1].replace(/<(.*?)>/g, ""), { lang: "" })
+        );
+        continue;
+      }
+
       matches[1] = matches[1].replace(/<(.*?)>/g, "");
       matches[1] = he.decode(matches[1]);
 
       data.content = data.content.replace(
         matches[0],
         await highlighter.codeToHtml(matches[1], { lang: langs[count] })
-      );
-      ++count; // get next lang
+      ), ++count; // get next lang
     }
 
-    debug.log(data.source);
+    // debug.log(data.source);
 
     return data;
   },
-  11
+  20
 );
