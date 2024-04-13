@@ -1,6 +1,6 @@
 'use strict';
 
-const fs = require('fs');
+import fs from 'node:fs';
 
 /**
  * Writes the given log to the "hexo-shiki.log" file.
@@ -8,7 +8,7 @@ const fs = require('fs');
  * @param {string} log - The log to be written. It can be an object or a string.
  * @return {undefined} This function does not return anything.
  */
-function log(log){
+export function log(log){
 
   fs.writeFile("hexo-shiki.log", log+'\n', {
     flag: "a",
@@ -17,5 +17,3 @@ function log(log){
 
 // init log file
 fs.writeFile("hexo-shiki.log", "", {}, _=>{});
-
-module.exports = {log};

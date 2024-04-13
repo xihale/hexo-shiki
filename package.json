@@ -1,26 +1,29 @@
 {
   "name": "hexo-shiki",
-  "version": "0.0.7",
-  "main": "index.js",
+  "version": "0.1.0",
   "author": "xihale",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -r dist > /dev/null 2>&1 || true",
+    "pretest": "npm run clean && npm run build"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/xihale/hexo-shiki"
   },
-  "license": "MIT",
+  "main": "index.js",
   "dependencies": {
-    "he": "^1.2.0",
-    "shiki": "^0.14.3",
-    "vscode-oniguruma": "^1.7.0",
-    "vscode-textmate": "^9.0.0"
+    "shiki": ">=1.3.0"
   },
   "keywords": [
     "shiki",
     "hexo"
   ],
+  "license": "MIT",
   "devDependencies": {
-    "eslint": "^8.46.0"
-  },
-  "_from": "hexo-shiki@0.0.3",
-  "_resolved": "https://registry.npmmirror.com/hexo-shiki/-/hexo-shiki-0.0.3.tgz"
+    "@types/hexo": "^3.8.12",
+    "@types/node": "^20.11.24",
+    "typescript": "^5.3.3"
+  }
 }
